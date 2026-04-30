@@ -1,0 +1,31 @@
+# Build directories
+build/
+temp_extract/
+
+# Compiled binaries
+*.exe
+*.out
+*.o
+*.obj
+
+# CMake generated
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Runtime output
+results.csv
+results.html
+
+# Temporary / extracted files
+sheet1.txt
+shared_strings.txt
+Danhsach.xlsx
+lieng_text.txt
+read_docs.ps1
+
+# IDE / editor
+.vscode/
+.vs/
+*.user
