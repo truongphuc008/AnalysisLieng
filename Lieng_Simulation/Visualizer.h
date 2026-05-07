@@ -28,7 +28,8 @@ public:
 
     // Xuat bieu do HTML dep voi Chart.js
     static void xuatHTML(
-        const std::vector<std::vector<double>>& lichSu,
+        const std::vector<std::vector<double>>& lichSu100k,
+        const std::vector<int>&                 soVanThang200,
         const std::vector<std::string>&         tenNguoiChoi,
         int buocLuu,
         const std::string& duongDan = "results.html"

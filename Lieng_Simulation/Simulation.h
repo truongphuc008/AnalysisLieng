@@ -22,10 +22,12 @@ public:
     explicit MoPhong(std::vector<NguoiChoi>& danhSach, CauHinh cauHinh = CauHinh{});
 
     // Chạy toàn bộ mô phỏng
-    void chay();
+    void chay(bool xuatFile = true);
 
     // Truy xuất lịch sử tiền
     const std::vector<std::vector<double>>& layLichSu() const { return lichSu; }
+
+    const std::vector<int>& laySoVanThang() const { return soVanThang; }
 
     // Xuất CSV
     void xuatCSV() const;
@@ -41,6 +43,7 @@ private:
     // lichSu[snapshot][nguoi_choi] = tiền tại snapshot đó
     std::vector<std::vector<double>> lichSu;
     std::vector<std::string>         tenNguoiChoi;
+    std::vector<int>                 soVanThang;
 
     // Kiểm tra còn ai có thể chơi không
     bool conNguoiChoi() const;

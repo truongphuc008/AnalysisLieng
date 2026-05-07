@@ -162,7 +162,8 @@ void HienThi::inBieuDoASCII(
 //  Xuất file HTML với biểu đồ Chart.js
 // ─────────────────────────────────────────────────────────────
 void HienThi::xuatHTML(
-    const std::vector<std::vector<double>>& lichSu,
+    const std::vector<std::vector<double>>& lichSu100k,
+    const std::vector<int>&                 soVanThang200,
     const std::vector<std::string>&         tenNguoiChoi,
     int buocLuu,
     const std::string& duongDan)
@@ -174,7 +175,7 @@ void HienThi::xuatHTML(
     }
 
     int soNguoi    = static_cast<int>(tenNguoiChoi.size());
-    int soSnapshot = static_cast<int>(lichSu.size());
+    int soSnapshot = static_cast<int>(lichSu100k.size());
 
     // Màu biểu đồ cho từng người chơi
     const char* MAU[] = {
@@ -216,7 +217,7 @@ void HienThi::xuatHTML(
         bool dauTien = true;
         for (int si = 0; si < soSnapshot; si += buoc) {
             if (!dauTien) tapDuLieuJS << ",";
-            tapDuLieuJS << std::fixed << std::setprecision(0) << lichSu[si][pi];
+            tapDuLieuJS << std::fixed << std::setprecision(0) << lichSu100k[si][pi];
             dauTien = false;
         }
         tapDuLieuJS << "]\n}";
@@ -237,8 +238,8 @@ void HienThi::xuatHTML(
     // Bảng tổng kết
     std::ostringstream bangTongKet;
     for (int pi = 0; pi < soNguoi; ++pi) {
-        double tienCuoi  = lichSu.back()[pi];
-        double tienDau   = lichSu.front()[pi];
+        double tienCuoi  = lichSu100k.back()[pi];
+        double tienDau   = lichSu100k.front()[pi];
         double chenh     = tienCuoi - tienDau;
         std::string dau  = (chenh >= 0 ? "+" : "") +
             std::to_string(static_cast<long long>(chenh));
@@ -339,9 +340,16 @@ void HienThi::xuatHTML(
 <p class="phu-de">Mo phong 100,000 luot choi | 6 nguoi choi voi tam ly khac nhau</p>
 
 <div class="the">
-  <h2>Bieu Do So Tien Theo Luot Choi</h2>
+  <h2>Bieu Do So Tien Theo Luot Choi (100.000 van)</h2>
   <div class="khung-bieu-do">
     <canvas id="bieuDo"></canvas>
+  </div>
+</div>
+
+<div class="the">
+  <h2>Bieu Do So Van Thang (trong 200 van doc lap)</h2>
+  <div class="khung-bieu-do">
+    <canvas id="bieuDoCot"></canvas>
   </div>
 </div>
 
@@ -391,6 +399,18 @@ void HienThi::xuatHTML(
 const nhan = )";
     f << nhanMauJS.str() << ";\n";
     f << "const tapDuLieu = " << tapDuLieuJS.str() << ";\n";
+    
+    std::ostringstream tenNguoiChoiJS, tapDuLieuCotJS;
+    tenNguoiChoiJS << "["; tapDuLieuCotJS << "[";
+    for (int pi = 0; pi < soNguoi; ++pi) {
+        if (pi > 0) { tenNguoiChoiJS << ","; tapDuLieuCotJS << ","; }
+        tenNguoiChoiJS << "'" << tenNguoiChoi[pi] << "'";
+        tapDuLieuCotJS << soVanThang200[pi];
+    }
+    tenNguoiChoiJS << "]"; tapDuLieuCotJS << "]";
+    f << "const tenNguoiChoiArr = " << tenNguoiChoiJS.str() << ";\n";
+    f << "const tapDuLieuCot = " << tapDuLieuCotJS.str() << ";\n";
+
     f << R"(
 const ctx = document.getElementById('bieuDo').getContext('2d');
 new Chart(ctx, {
@@ -429,6 +449,44 @@ new Chart(ctx, {
         },
         grid:  { color: '#1f1f3a' },
         title: { display: true, text: 'So tien (dong)', color: '#888' }
+      }
+    }
+  }
+});
+
+const ctxCot = document.getElementById('bieuDoCot').getContext('2d');
+new Chart(ctxCot, {
+  type: 'bar',
+  data: {
+    labels: tenNguoiChoiArr,
+    datasets: [{
+      label: 'So van thang',
+      data: tapDuLieuCot,
+      backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#DDA0DD'],
+      borderColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#DDA0DD'],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1a1a2e',
+        titleColor: '#fff',
+        bodyColor: '#ccc',
+        callbacks: {
+          label: ctx => ctx.raw + ' van'
+        }
+      }
+    },
+    scales: {
+      x: { grid: { color: '#1f1f3a' }, ticks: { color: '#ccc' } },
+      y: { 
+        grid: { color: '#1f1f3a' }, 
+        ticks: { color: '#ccc', stepSize: 1 }, 
+        title: { display: true, text: 'So van thang', color: '#888' } 
       }
     }
   }

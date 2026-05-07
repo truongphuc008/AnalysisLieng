@@ -142,7 +142,7 @@ KetQua VanBai::chay() {
 
     if (dangChoi.size() < 2) {
         KetQua kq;
-        kq.nguoiThang  = dangChoi.empty() ? nullptr : dangChoi[0];
+        if (!dangChoi.empty()) kq.danhSachThang.push_back(dangChoi[0]);
         kq.tienPot     = 0.0;
         kq.hangBaiThang = HangBai::RAC;
         return kq;
@@ -160,8 +160,8 @@ KetQua VanBai::chay() {
     NguoiChoi* nguoiThang = soBai(danhSachThang);
 
     KetQua ketQua;
-    ketQua.tienPot    = tienPot;
-    ketQua.nguoiThang = nguoiThang;
+    ketQua.tienPot       = tienPot;
+    ketQua.danhSachThang = danhSachThang;
 
     if (!danhSachThang.empty()) {
         ketQua.hangBaiThang = DanhGiaBai::danhGia(danhSachThang[0]->tay);

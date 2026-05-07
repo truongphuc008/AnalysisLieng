@@ -10,7 +10,7 @@
 //  Constructor
 // ─────────────────────────────────────────────────────────────
 MoPhong::MoPhong(std::vector<NguoiChoi>& danhSach, CauHinh cauHinh)
-    : danhSach(danhSach), cauHinh(cauHinh)
+    : danhSach(danhSach), cauHinh(cauHinh), soVanThang(danhSach.size(), 0)
 {
     for (const auto& ng : danhSach)
         tenNguoiChoi.push_back(ng.ten);
@@ -29,7 +29,7 @@ bool MoPhong::conNguoiChoi() const {
 // ─────────────────────────────────────────────────────────────
 //  Chạy toàn bộ mô phỏng
 // ─────────────────────────────────────────────────────────────
-void MoPhong::chay() {
+void MoPhong::chay(bool xuatFile) {
     // Chuẩn bị vector con trỏ cho VanBai
     std::vector<NguoiChoi*> danhSachPtr;
     for (auto& ng : danhSach)
@@ -42,19 +42,31 @@ void MoPhong::chay() {
         lichSu.push_back(snap);
     }
 
-    std::cout << "\n========================================\n";
-    std::cout << "  MO PHONG BAI LIENG – " << cauHinh.tongSoVan << " van\n";
-    std::cout << "========================================\n\n";
+    if (xuatFile) {
+        std::cout << "\n========================================\n";
+        std::cout << "  MO PHONG BAI LIENG – " << cauHinh.tongSoVan << " van\n";
+        std::cout << "========================================\n\n";
+    }
 
     for (int van = 1; van <= cauHinh.tongSoVan; ++van) {
         if (!conNguoiChoi()) {
-            std::cout << "[!] Chi con 1 nguoi choi o van " << van
-                      << ", dung mo phong.\n";
+            if (xuatFile) {
+                std::cout << "[!] Chi con 1 nguoi choi o van " << van
+                          << ", dung mo phong.\n";
+            }
             break;
         }
 
         VanBai vanBai(danhSachPtr, boBai);
-        vanBai.chay();
+        KetQua kq = vanBai.chay();
+        
+        for (NguoiChoi* winner : kq.danhSachThang) {
+            for (size_t i = 0; i < danhSach.size(); ++i) {
+                if (&danhSach[i] == winner) {
+                    soVanThang[i]++;
+                }
+            }
+        }
 
         // Ghi snapshot mỗi luuMoi ván
         if (van % cauHinh.luuMoi == 0) {
@@ -64,7 +76,7 @@ void MoPhong::chay() {
         }
 
         // In tiến độ mỗi 10,000 ván
-        if (van % 10000 == 0) {
+        if (xuatFile && van % 10000 == 0) {
             std::cout << "  Van " << std::setw(7) << van << " / "
                       << cauHinh.tongSoVan << "  |";
             for (const auto& ng : danhSach)
@@ -75,22 +87,11 @@ void MoPhong::chay() {
         }
     }
 
+    if (!xuatFile) return;
+
     std::cout << "\n========================================\n";
     std::cout << "  KET QUA SAU MO PHONG\n";
     std::cout << "========================================\n";
-
-    xuatCSV();
-    HienThi::xuatHTML(lichSu, tenNguoiChoi, cauHinh.luuMoi, cauHinh.duongDanHTML);
-
-    HienThi::inBangTongKet(danhSach, 10000.0);
-
-    std::cout << "\n[+] Da xuat file CSV : " << cauHinh.duongDanCSV << "\n";
-    std::cout << "[+] Da xuat bieu do  : " << cauHinh.duongDanHTML << "\n";
-    std::cout << "\n[*] Dang mo bieu do trong trinh duyet...\n";
-
-    // Tự động mở file HTML trong trình duyệt mặc định
-    std::string lenh = "start \"\" \"" + cauHinh.duongDanHTML + "\"";
-    system(lenh.c_str());
 }
 
 // ─────────────────────────────────────────────────────────────

@@ -3,6 +3,7 @@
 #include <vector>
 #include "Player.h"
 #include "Simulation.h"
+#include "Visualizer.h"
 
 // ================================================================
 //  Mini-Project: Mo phong bai Lien (OOP C++)
@@ -92,16 +93,46 @@ int main() {
     std::cout << "  Bai dac biet (Sam Co / Lieng / Sanh Rong) -> To toi da 1000d\n";
     std::cout << "  Hoa: Nhieu nguoi cung hang bai -> chia deu chung cuoc\n\n";
 
-    // ── Cấu hình mô phỏng ─────────────────────────────────────
-    CauHinh cauHinh;
-    cauHinh.tongSoVan   = 100000;
-    cauHinh.luuMoi      = 100;      // Luu anh chup moi 100 van
-    cauHinh.duongDanCSV  = "results.csv";
-    cauHinh.duongDanHTML = "results.html";
+    // ── Giai đoạn 1: 100,000 ván (Biểu đồ đường) ────────────────
+    std::cout << "\n[ Giai doan 1 ] Chay 100,000 van de lay du lieu bieu do duong...\n";
+    CauHinh cauHinh1;
+    cauHinh1.tongSoVan   = 100000;
+    cauHinh1.luuMoi      = 100;
+    cauHinh1.duongDanCSV  = "results.csv";
+    cauHinh1.duongDanHTML = "results.html";
 
-    // ── Chạy mô phỏng ─────────────────────────────────────────
-    MoPhong moPhong(danhSachNguoiChoi, cauHinh);
-    moPhong.chay();
+    std::vector<NguoiChoi> ds1 = danhSachNguoiChoi;
+    MoPhong moPhong1(ds1, cauHinh1);
+    moPhong1.chay(true); 
+
+    auto lichSu100k = moPhong1.layLichSu();
+    moPhong1.xuatCSV(); // Xuất CSV cho 100k ván
+    
+    // ── Giai đoạn 2: 200 ván (Biểu đồ cột) ──────────────────────
+    std::cout << "\n[ Giai doan 2 ] Chay 200 van doc lap de lay du lieu bieu do cot...\n";
+    CauHinh cauHinh2;
+    cauHinh2.tongSoVan   = 200;
+    cauHinh2.luuMoi      = 1;
+    
+    std::vector<NguoiChoi> ds2 = danhSachNguoiChoi;
+    MoPhong moPhong2(ds2, cauHinh2);
+    moPhong2.chay(false); // Chạy ngầm, không in ra màn hình
+
+    auto soVanThang200 = moPhong2.laySoVanThang();
+
+    // ── Xuất Kết quả HTML gộp chung ──────────────────────────────
+    std::vector<std::string> tenNguoiChoi;
+    for(const auto& ng: danhSachNguoiChoi) tenNguoiChoi.push_back(ng.ten);
+    
+    HienThi::xuatHTML(lichSu100k, soVanThang200, tenNguoiChoi, cauHinh1.luuMoi, cauHinh1.duongDanHTML);
+    HienThi::inBangTongKet(ds1, 10000.0);
+
+    std::cout << "\n[+] Da xuat file CSV : " << cauHinh1.duongDanCSV << "\n";
+    std::cout << "[+] Da xuat bieu do  : " << cauHinh1.duongDanHTML << "\n";
+    std::cout << "\n[*] Dang mo bieu do trong trinh duyet...\n";
+
+    std::string lenh = "start \"\" \"" + cauHinh1.duongDanHTML + "\"";
+    system(lenh.c_str());
 
     // Giữ cửa sổ khi chạy bằng double-click .exe
     std::cout << "Nhan Enter de thoat...";

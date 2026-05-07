@@ -7,7 +7,7 @@
 //  Kết quả của một ván bài
 // =============================================================
 struct KetQua {
-    NguoiChoi*  nguoiThang;   // nullptr nếu tất cả bỏ
+    std::vector<NguoiChoi*> danhSachThang;   // Trống nếu tất cả bỏ
     double      tienPot;      // Tổng tiền thắng
     HangBai     hangBaiThang; // Hạng bài người thắng
 };
