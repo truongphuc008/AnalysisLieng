@@ -1,0 +1,38 @@
+# Prerequisites
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.obj
+*.pyc
+
+# Logs and databases
+*.log
+*.sqlite
+data/
+temp_extract/
+
+# Visual Studio / CMake
+.vs/
+out/
+build/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.cmake
+CMakeCache.txt
+CMakeFiles/
+Makefile
+*.ninja
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
