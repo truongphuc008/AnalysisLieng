@@ -106,10 +106,10 @@ git clone https://github.com/truongphuc008/AnalysisLieng.git
 cd AnalysisLieng/Lieng_Simulation
 
 # 2. Biên dịch và chạy
-g++ *.cpp -O3 -std=c++17 -o LiengSimulation_FastRun; .\LiengSimulation_FastRun.exe
+g++ Card.cpp Deck.cpp GameRound.cpp Hand.cpp HandEvaluator.cpp main.cpp Player.cpp Simulation.cpp Visualizer.cpp -O3 -std=c++17 -o LiengSimulation_FastRun; .\LiengSimulation_FastRun.exe
 
 # 3. (Tùy chọn) Xóa file thực thi sau khi chạy
 rm LiengSimulation_FastRun.exe
 ```
 
-*Lưu ý: Nếu dùng CMD, thay `./` bằng `.\` và đảm bảo g++ đã có trong PATH.*
+*Lưu ý: Nếu bạn gặp lỗi với `*.cpp`, việc liệt kê tên từng file như trên (hoặc dùng `g++ $(dir *.cpp) ...` trong PowerShell) sẽ giải quyết được vấn đề.*
