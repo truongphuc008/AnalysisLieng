@@ -1,4 +1,4 @@
-# 🃏 Monte Carlo Casino Simulation
+# 🃏 Mô Phỏng Bài Liêng
 ### Biểu đồ Phân phối Xác suất Chiến thắng trong mô hình trò chơi Liêng theo Hệ số Tâm lý
 
 ![C++](https://img.shields.io/badge/C++-17-00599C?style=for-the-badge&logo=c%2B%2B)
