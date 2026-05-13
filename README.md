@@ -37,7 +37,7 @@ Mô hình mô phỏng trò chơi **Liêng** sử dụng bộ bài Tây 52 lá, g
 Mô hình đánh giá sự ảnh hưởng của **yếu tố tâm lý ban đầu** đến kết quả tài chính chung cuộc của người chơi. Hành vi cược (Theo/Tố/Bỏ) không chỉ phụ thuộc vào độ mạnh của bài mà còn bị chi phối bởi trạng thái tâm lý.
 
 * 👥 **Số lượng:** 6 người chơi.
-* 💰 **Vốn ban đầu:** Một số tiền rất lớn (không giới hạn).
+* 💰 **Vốn ban đầu:** 10 nghìn VND trên mỗi người chơi
 * 🧘 **Tâm lý khởi điểm:** Mỗi người có một chỉ số tâm lý ngẫu nhiên từ 1 đến 10 ($1 \le x \le 10$).
 
 ---
@@ -100,16 +100,18 @@ Tiến hành chạy lặp lại chu trình trên qua **100.000 lượt chơi**. 
 ### 🚀 Quick Run (Chạy nhanh qua Terminal - Windows)
 Nếu bạn đang dùng Windows (PowerShell), hãy copy đoạn mã này để chạy ngay lập tức:
 
-```powershell
+
 # 1. Clone dự án và truy cập vào thư mục code
+```
 git clone https://github.com/truongphuc008/AnalysisLieng.git
-cd AnalysisLieng/Lieng_Simulation
-
-# 2. Biên dịch và chạy
-g++ Card.cpp Deck.cpp GameRound.cpp Hand.cpp HandEvaluator.cpp main.cpp Player.cpp Simulation.cpp Visualizer.cpp -O3 -std=c++17 -o LiengSimulation_FastRun; .\LiengSimulation_FastRun.exe
-
-# 3. (Tùy chọn) Xóa file thực thi sau khi chạy
-rm LiengSimulation_FastRun.exe
 ```
 
-*Lưu ý: Nếu bạn gặp lỗi với `*.cpp`, việc liệt kê tên từng file như trên (hoặc dùng `g++ $(dir *.cpp) ...` trong PowerShell) sẽ giải quyết được vấn đề.*
+```
+cd AnalysisLieng/Lieng_Simulation
+```
+
+
+# 2. Biên dịch và chạy
+```
+g++ Card.cpp Deck.cpp GameRound.cpp Hand.cpp HandEvaluator.cpp main.cpp Player.cpp Simulation.cpp Visualizer.cpp -O3 -std=c++17 -o LiengSimulation_FastRun; .\LiengSimulation_FastRun.exe
+```
